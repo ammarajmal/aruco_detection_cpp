@@ -16,7 +16,7 @@ using namespace std;
 int markNum(1);
 int waitTime(50);
 const float calibrationSquareDimension = 0.02245f; // meters
-const float arucoSquareDimention = 0.02f; // meters
+const float arucoSquareDimension = 0.02f; // meters
 const Size chessboardDimensions = Size(6,9);
 
 void createKnownBoardPosition(Size boardSize, float squareEdgeLength, vector<Point3f>& corners){
@@ -26,7 +26,6 @@ void createKnownBoardPosition(Size boardSize, float squareEdgeLength, vector<Poi
         }
     }
 }
-
 void getChessboardCorners(vector<Mat> images, vector<vector<Point2f>>& allFoundCorners, bool showResults = false){
     for  (vector<Mat>::iterator iter = images.begin(); iter != images.end(); iter++){
         vector<Point2f> pointBuf;
@@ -43,7 +42,6 @@ void getChessboardCorners(vector<Mat> images, vector<vector<Point2f>>& allFoundC
         }
     }
 }
-
 Mat markerGenerator(int markNum){
     Mat markerImage;
     Ptr<aruco::Dictionary> dictionary = aruco::getPredefinedDictionary(aruco::DICT_4X4_1000);
@@ -51,7 +49,6 @@ Mat markerGenerator(int markNum){
     imwrite("marker0.png", markerImage);
     return markerImage;
 }
-
 void createArucoMarkers(){
     Mat outputMarker;
     Ptr<aruco::Dictionary> markerDictionary = aruco::getPredefinedDictionary(aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50);
@@ -63,9 +60,6 @@ void createArucoMarkers(){
         imwrite(convert.str(), outputMarker);
     }
 }
-
-
-
 void markerDetector(int camera){
     VideoCapture inputVideo;
     inputVideo.open(camera);
@@ -87,7 +81,6 @@ void markerDetector(int camera){
         break;
     }
 }
-
 void cameraCalibration(vector<Mat> calibrationImages, Size boardSize, float squareEdgeLength, Mat& cameraMatrix, Mat& distanceCoefficients){
     vector<vector<Point2f>> checkerboardImageSpacePoints;
     getChessboardCorners(calibrationImages, checkerboardImageSpacePoints, false);
@@ -98,7 +91,6 @@ void cameraCalibration(vector<Mat> calibrationImages, Size boardSize, float squa
     distanceCoefficients = Mat::zeros(8, 1, CV_64F);
     calibrateCamera(worldSpaceCornerPoints, checkerboardImageSpacePoints, boardSize, cameraMatrix, distanceCoefficients, rVectors, tVectors);
 }
-
 // int cameraCalibrationWebcam(){
 //     Mat frame;
 //     Mat drawToFrame;
@@ -109,7 +101,6 @@ void cameraCalibration(vector<Mat> calibrationImages, Size boardSize, float squa
 //     VideoCapture vid(2);
 //     if (!vid.isOpened()){
 //         return 0;
-
 //     }
 //     int framesPerSecond = 30;
 //     namedWindow("webcam", WINDOW_AUTOSIZE);
@@ -119,7 +110,6 @@ void cameraCalibration(vector<Mat> calibrationImages, Size boardSize, float squa
 //         }
 //         vector<Vec2f> foundPoints;
 //         bool found = false;
-
 //         found = findChessboardCorners(frame, chessboardDimensions, foundPoints, CALIB_CB_ADAPTIVE_THRESH | CALIB_CB_NORMALIZE_IMAGE | CALIB_CB_FAST_CHECK);
 //         frame.copyTo(drawToFrame);
 //         drawChessboardCorners(drawToFrame, chessboardDimensions, foundPoints, found);
@@ -142,35 +132,29 @@ void cameraCalibration(vector<Mat> calibrationImages, Size boardSize, float squa
 //                     savedImages.push_back(temp);
 //                 }
 //                 break;
-
 //             }
 //             case 13:{
 //                 // start calibration
 //                 if (savedImages.size() > 15) {
 //                     cameraCalibration(savedImages, chessboardDimensions, calibrationSquareDimension, cameraMatrix, distanceCoefficients);
-
 //                 }
 //                 break;
 //             }
-            
 //             case 27:{
 //                 //exit 
 //                 return 0;
 //                 break;
 //             }
-            
 //         }
-
-
 //     }
-
 // }
-
 bool saveCameraCalibration(string name, Mat cameraMatrix, Mat distanceCoefficients){
     ofstream outstream(name);
     if (outstream){
         uint16_t rows = cameraMatrix.rows;
         uint16_t columns = cameraMatrix.cols;
+        outstream << rows << endl;
+        outstream << columns << endl;
 
         for (int r = 0; r < rows; r++){
             for(int c = 0; c< columns ; c++){
@@ -181,6 +165,8 @@ bool saveCameraCalibration(string name, Mat cameraMatrix, Mat distanceCoefficien
         }
         rows = distanceCoefficients.rows;
         columns = distanceCoefficients.cols;
+        outstream << rows << endl;
+        outstream << columns << endl;
         for (int r = 0; r < rows; r++){
             for(int c = 0; c< columns ; c++){
                 double value = distanceCoefficients.at<double>(r,c);
@@ -193,45 +179,31 @@ bool saveCameraCalibration(string name, Mat cameraMatrix, Mat distanceCoefficien
     }
     return false;
 }
-
-int mainCalib()
+void cameraCalibrationProcess(Mat& cameraMatrix, Mat& distanceCoefficients)
 {
-    // cameraCalibrationWebcam();
-
-    // createArucoMarkers();
-    // markerGenerator(0);
-    // markerDetector(2);
-
-
     Mat frame;
     Mat drawToFrame;
-    Mat cameraMatrix = Mat::eye(3, 3, CV_64F);
-    Mat distanceCoefficients;
+    // Mat cameraMatrix = Mat::eye(3, 3, CV_64F);
+    // Mat distanceCoefficients;
     vector<Mat> savedImages;
     vector<vector<Point2f>> markerCorners, rejectedCandidates;
     VideoCapture vid(2);
-    if (!vid.isOpened()){
-        return 0;
-
-    }
+    if (!vid.isOpened())
+        return;
     int framesPerSecond = 30;
     namedWindow("webcam", WINDOW_AUTOSIZE);
     while (true){
-        if (!vid.read(frame)){
+        if (!vid.read(frame))
             break;
-        }
         vector<Vec2f> foundPoints;
         bool found = false;
-
         found = findChessboardCorners(frame, chessboardDimensions, foundPoints, CALIB_CB_ADAPTIVE_THRESH | CALIB_CB_NORMALIZE_IMAGE | CALIB_CB_FAST_CHECK);
         frame.copyTo(drawToFrame);
         drawChessboardCorners(drawToFrame, chessboardDimensions, foundPoints, found);
-        if (found){
+        if (found)
             imshow("webcam", drawToFrame);
-        }
-        else{
+        else
             imshow("webcam", frame);
-        }
         char character = waitKey(1000/framesPerSecond);
             // 1. Save an image(Space Key) -- if we see a valid checkerboard image
             // 2. Start Camera clibration (Enter Key) -- if we wanted to start camera calibration so long as we have enough images like 10 or 15
@@ -245,35 +217,125 @@ int mainCalib()
                     savedImages.push_back(temp);
                 }
                 break;
-
             }
             case 13:{
                 // start calibration
                 if (savedImages.size() > 15) {
                     cameraCalibration(savedImages, chessboardDimensions, calibrationSquareDimension, cameraMatrix, distanceCoefficients);
                     saveCameraCalibration("my_camera_calibration", cameraMatrix, distanceCoefficients);
-
                 }
                 break;
             }
-            
             case 27:{
                 //exit 
-                return 0;
+                return;
                 break;
             }
-            
         }
-
-
     }
+    return;
+}
+// int startWebcamMonitoring(const Mat& cameraMatrix, const Mat& distanceCoefficients, float arucoSquareDimension){
+//     Mat frame;
+//     vector<int> markerIds;
+//     vector<vector<Point2f>> markerCorners, rejectedCandidates;
+//     aruco::DetectorParameters parameters;
+//     Ptr<aruco::Dictionary> markerDictionary = aruco::getPredefinedDictionary(aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50);
+//     VideoCapture vid(2);
+//     if(!vid.isOpened()){
+//         return -1;
+//     }
+//     namedWindow("webcam", WINDOW_AUTOSIZE);
+//     vector<Vec3d> rotationVectors, translationVectors;
+//     while (true){
+//         if (!vid.read(frame))
+//             return;
+//         aruco::detectMarkers(frame, markerDictionary,markerCorners, markerIds);
+//         aruco::estimatePoseSingleMarkers(markerCorners, arucoSquareDimension, cameraMatrix, distanceCoefficients, rotationVectors, translationVectors);
+//         for (int i = 0; i < markerIds.size(); i++){
+//             aruco::drawAxis(frame, cameraMatrix, distanceCoefficients, rotationVectors, translationVectors, 0.1f);
+//         }
+//         imshow("webcam", frame);
+//         if (waitKey(30) >= 0)
+//             break;
+//     }
+//     return 1;
+// }
+bool loadCameraCalibration(string name, Mat& cameraMatrix, Mat& distanceCoefficients){
+    ifstream instream(name);
+    if (instream){
+        uint16_t rows;
+        uint16_t columns;
+        instream >> rows;
+        instream >> columns;
+        cameraMatrix = Mat(Size(columns, rows), CV_64F);
+        for (int r = 0 ; r< rows; r++){
+            for (int c =0; c < columns; c++){
+                double read = 0.0f;
+                instream >> read;
+                cameraMatrix.at<double>(r,c) = read;
+                cout<< cameraMatrix.at<double>(r, c) << endl;
+            }
+        }
+        // Distance Coefficients
+        instream >> rows;
+        instream >> columns;
+        distanceCoefficients = Mat::zeros(rows, columns, CV_64F);
+        for (int r = 0; r < rows; r ++ ){
+            for (int c = 0; c < columns ; c++){
+                double read = 0.0f;
+                instream >> read;
+                distanceCoefficients.at<double>(r,c) = read;
+                cout<< distanceCoefficients.at<double>(r,c) << endl;
+            }
+        }
+        instream.close();
+        return true;
+    }
+    return false;
+}
 
+int startWebcamMonitoring(const Mat& cameraMatrix, const Mat& distanceCoefficients, float arucoSquareDimension) {
+    Mat frame;
+    vector<int>  markerIds;
+    vector<vector<Point2f>> markerCorners, rejectedCandidates;
+    aruco::DetectorParameters parameters;
+    Ptr<aruco::Dictionary> markerDictionary = aruco::getPredefinedDictionary(aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50);
+    
+    VideoCapture vid(2);
+    if (!vid.isOpened())
+        return -1;
+    namedWindow("webcam", WINDOW_AUTOSIZE);
 
-    return 0;
+    vector<Vec3d> rotationVectors, translationVectors;
+
+    while (true){
+        if (!vid.read(frame))
+            break;
+        aruco::detectMarkers(frame, markerDictionary, markerCorners, markerIds);
+        aruco::estimatePoseSingleMarkers(markerCorners, arucoSquareDimension, cameraMatrix, distanceCoefficients, rotationVectors, translationVectors);
+
+        for (int i =0 ; i < markerIds.size(); i++)
+            aruco::drawAxis(frame, cameraMatrix, distanceCoefficients, rotationVectors[i], translationVectors[i], 0.1f);
+        imshow("webcam", frame);
+        if (waitKey(30)>=0)
+            break;
+    }
+    return 1;
 }
 
 int main(int, char**)
 {
-    mainCalib();
+    Mat cameraMatrix = Mat::eye(3, 3, CV_64F);
+    Mat distanceCoefficients;
+
+    // cameraCalibrationProcess(cameraMatrix, distanceCoefficients);
+    loadCameraCalibration("my_camera_calibration", cameraMatrix, distanceCoefficients);
+    startWebcamMonitoring(cameraMatrix, distanceCoefficients, 0.099f);
+    // cameraCalibrationWebcam();
+
+    // createArucoMarkers();
+    // markerGenerator(0);
+    // markerDetector(2);
     return 0;
 }
