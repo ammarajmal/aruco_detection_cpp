@@ -111,19 +111,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named marker
-
-# Build rule for target.
-marker: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 marker
-.PHONY : marker
-
-# fast build rule for target.
-marker/fast:
-	$(MAKE) -f CMakeFiles/marker.dir/build.make CMakeFiles/marker.dir/build
-.PHONY : marker/fast
-
-#=============================================================================
 # Target rules for targets named aruco_executable
 
 # Build rule for target.
@@ -163,33 +150,6 @@ aruco.cpp.s:
 	$(MAKE) -f CMakeFiles/aruco_executable.dir/build.make CMakeFiles/aruco_executable.dir/aruco.cpp.s
 .PHONY : aruco.cpp.s
 
-detect_markers_my.o: detect_markers_my.cpp.o
-
-.PHONY : detect_markers_my.o
-
-# target to build an object file
-detect_markers_my.cpp.o:
-	$(MAKE) -f CMakeFiles/marker.dir/build.make CMakeFiles/marker.dir/detect_markers_my.cpp.o
-.PHONY : detect_markers_my.cpp.o
-
-detect_markers_my.i: detect_markers_my.cpp.i
-
-.PHONY : detect_markers_my.i
-
-# target to preprocess a source file
-detect_markers_my.cpp.i:
-	$(MAKE) -f CMakeFiles/marker.dir/build.make CMakeFiles/marker.dir/detect_markers_my.cpp.i
-.PHONY : detect_markers_my.cpp.i
-
-detect_markers_my.s: detect_markers_my.cpp.s
-
-.PHONY : detect_markers_my.s
-
-# target to generate assembly for a file
-detect_markers_my.cpp.s:
-	$(MAKE) -f CMakeFiles/marker.dir/build.make CMakeFiles/marker.dir/detect_markers_my.cpp.s
-.PHONY : detect_markers_my.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -197,15 +157,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
-	@echo "... marker"
 	@echo "... rebuild_cache"
 	@echo "... aruco_executable"
 	@echo "... aruco.o"
 	@echo "... aruco.i"
 	@echo "... aruco.s"
-	@echo "... detect_markers_my.o"
-	@echo "... detect_markers_my.i"
-	@echo "... detect_markers_my.s"
 .PHONY : help
 
 

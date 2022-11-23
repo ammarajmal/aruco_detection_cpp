@@ -90,10 +90,39 @@ void markerDetector(int camera){
 
 int main(int, char**)
 {
-    createArucoMarkers();
+    Mat frame;
+    Mat drawToFrame;
+    Mat cameraMatrix = Mat::eye(3, 3, CV_64F);
+    Mat distanceCoefficients;
+    vector<Mat> savedImages;
+    vector<vector<Point2f>> markerCorners, rejectedCandidates;
+    VideoCapture vid(2);
+    if (!vid.isOpened()){
+        return 0;
+
+    }
+    int framesPerSecond = 30;
+    namedWindow("webcam", WINDOW_AUTOSIZE);
+    while (true){
+        if (!vid.read(frame)){
+            break;
+        }
+        vector<Vec2f> foundPoints;
+        bool found = false;
+
+        found = findChessboardCorners(frame, chessboardDimensions, foundPoints, CALIB_CB_ADAPTIVE_THRESH | CALIB_CB_NORMALIZE_IMAGE | CALIB_CB_FAST_CHECK);
+        frame.copyTo(drawToFrame);
+        drawChessboardCorners(drawToFrame, chessboardDimensions, foundPoints, found);
+        if (found){
+            imshow("webcam", drawToFrame);
+        }
+        else{
+            imshow("webcam", frame);
+        }
+        char character = waitKey(1000/framesPerSecond);
+    }
+    // createArucoMarkers();
     // markerGenerator(0);
     // markerDetector(2);
-
-
     return 0;
 }

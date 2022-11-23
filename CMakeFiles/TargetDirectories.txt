@@ -1,4 +1,3 @@
 /home/ammar/sitl_agcam/aruco_detection_cpp/CMakeFiles/edit_cache.dir
-/home/ammar/sitl_agcam/aruco_detection_cpp/CMakeFiles/marker.dir
 /home/ammar/sitl_agcam/aruco_detection_cpp/CMakeFiles/rebuild_cache.dir
 /home/ammar/sitl_agcam/aruco_detection_cpp/CMakeFiles/aruco_executable.dir

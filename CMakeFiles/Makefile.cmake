@@ -51,6 +51,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/marker.dir/DependInfo.cmake"
   "CMakeFiles/aruco_executable.dir/DependInfo.cmake"
   )
