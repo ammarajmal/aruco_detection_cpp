@@ -8,9 +8,12 @@ import time
 
 # 0 - Dell Webcam
 
-cap = cv2.VideoCapture(0)
-start = time.time()
+
+path = '/home/ammar/sitl_agcam/aruco_detection_cpp/filename.avi'
+cap = cv2.VideoCapture(path)
+
 while cap.isOpened():
+    start = time.time()
     ret, frame = cap.read()
     if ret == True:
         cv2.imshow('Frame', frame)

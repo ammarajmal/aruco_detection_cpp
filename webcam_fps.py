@@ -8,7 +8,8 @@ import time
 
 
 wcam, hcam = 640, 480
-cap = cv2.VideoCapture(2)
+
+cap = cv2.VideoCapture('/home/ammar/sitl_agcam/aruco_detection_cpp/file.mp4')
 
 
 start_time = time.time()

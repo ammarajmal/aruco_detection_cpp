@@ -1,5 +1,4 @@
 // OpenCv 4.2.0
-
 #include "opencv2/opencv.hpp"
 #include <opencv2/aruco.hpp>
 using namespace cv;
@@ -115,9 +114,9 @@ void poseEstimation (void) {
 
 int main(int, char**)
 {
-    markerGenerator(0);
-    // markerDetector();
-    markerDetector_new();
+    // markerGenerator(0);
+    markerDetector();
+    // markerDetector_new();
 
     return 0;
 }
