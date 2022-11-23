@@ -15,6 +15,33 @@ using namespace cv;
 using namespace std;
 int markNum(1);
 int waitTime(50);
+const float calibrationSquareDimension = 0.02245f; // meters
+const float arucoSquareDimention = 0.02f; // meters
+const Size chessboardDimensions = Size(6,9);
+
+void createKnownBoardPosition(Size boardSize, float squareEdgeLength, vector<Point3f>& corners){
+    for (int i = 0; i < boardSize.height; i++) {
+        for (int j = 0; j < boardSize.width; j ++) {
+            corners.push_back(Point3f( j * squareEdgeLength, i * squareEdgeLength, 0.0f ));
+        }
+    }
+}
+
+void getChessboardCorners(vector<Mat> images, vector<vector<Point2f>>& allFoundCorners, bool showResults = false){
+    for  (vector<Mat>::iterator iter = images.begin(); iter != images.end(); iter++){
+        vector<Point2f> pointBuf;
+        bool found = findChessboardCorners(*iter, Size(9,6), pointBuf, CALIB_CB_ADAPTIVE_THRESH | CALIB_CB_NORMALIZE_IMAGE);
+        
+        if (found){
+            allFoundCorners.push_back(pointBuf);
+        }
+        if (showResults){
+            drawChessboardCorners(*iter, Size(9,6), pointBuf, found);
+            imshow("Look for Corners", *iter);
+            waitKey(0);
+        }
+    }
+}
 
 Mat markerGenerator(int markNum){
     Mat markerImage;
