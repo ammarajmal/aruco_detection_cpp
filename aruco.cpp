@@ -312,7 +312,7 @@ int startWebcamMonitoring(const Mat& cameraMatrix, const Mat& distanceCoefficien
     while (true){
         if (!vid.read(frame))
             break;
-        aruco::detectMarkers(frame, markerDictionary, markerCorners, markerIds);
+        aruco::detectMarkers(frame, markerDictionary, markerCorners, markerIds,);
         aruco::estimatePoseSingleMarkers(markerCorners, arucoSquareDimension, cameraMatrix, distanceCoefficients, rotationVectors, translationVectors);
 
         for (int i =0 ; i < markerIds.size(); i++)
