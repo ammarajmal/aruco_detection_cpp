@@ -15,8 +15,8 @@ using namespace cv;
 using namespace std;
 int markNum(1);
 int waitTime(50);
-const float calibrationSquareDimension = 0.02245f; // meters
-const float arucoSquareDimension = 0.02f; // meters
+const float calibrationSquareDimension = 0.0245f; // meters
+const float arucoSquareDimension = 0.1016f; // meters
 const Size chessboardDimensions = Size(6,9);
 
 void createKnownBoardPosition(Size boardSize, float squareEdgeLength, vector<Point3f>& corners){
@@ -312,7 +312,7 @@ int startWebcamMonitoring(const Mat& cameraMatrix, const Mat& distanceCoefficien
     while (true){
         if (!vid.read(frame))
             break;
-        aruco::detectMarkers(frame, markerDictionary, markerCorners, markerIds,);
+        aruco::detectMarkers(frame, markerDictionary, markerCorners, markerIds);
         aruco::estimatePoseSingleMarkers(markerCorners, arucoSquareDimension, cameraMatrix, distanceCoefficients, rotationVectors, translationVectors);
 
         for (int i =0 ; i < markerIds.size(); i++)
@@ -331,7 +331,7 @@ int main(int, char**)
 
     // cameraCalibrationProcess(cameraMatrix, distanceCoefficients);
     loadCameraCalibration("my_camera_calibration", cameraMatrix, distanceCoefficients);
-    startWebcamMonitoring(cameraMatrix, distanceCoefficients, 0.099f);
+    startWebcamMonitoring(cameraMatrix, distanceCoefficients, arucoSquareDimension);
     // cameraCalibrationWebcam();
 
     // createArucoMarkers();
