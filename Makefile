@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named fpsCal
+
+# Build rule for target.
+fpsCal: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 fpsCal
+.PHONY : fpsCal
+
+# fast build rule for target.
+fpsCal/fast:
+	$(MAKE) -f CMakeFiles/fpsCal.dir/build.make CMakeFiles/fpsCal.dir/build
+.PHONY : fpsCal/fast
+
+#=============================================================================
 # Target rules for targets named aruco_executable
 
 # Build rule for target.
@@ -150,6 +163,33 @@ aruco.cpp.s:
 	$(MAKE) -f CMakeFiles/aruco_executable.dir/build.make CMakeFiles/aruco_executable.dir/aruco.cpp.s
 .PHONY : aruco.cpp.s
 
+fpsCal.o: fpsCal.cpp.o
+
+.PHONY : fpsCal.o
+
+# target to build an object file
+fpsCal.cpp.o:
+	$(MAKE) -f CMakeFiles/fpsCal.dir/build.make CMakeFiles/fpsCal.dir/fpsCal.cpp.o
+.PHONY : fpsCal.cpp.o
+
+fpsCal.i: fpsCal.cpp.i
+
+.PHONY : fpsCal.i
+
+# target to preprocess a source file
+fpsCal.cpp.i:
+	$(MAKE) -f CMakeFiles/fpsCal.dir/build.make CMakeFiles/fpsCal.dir/fpsCal.cpp.i
+.PHONY : fpsCal.cpp.i
+
+fpsCal.s: fpsCal.cpp.s
+
+.PHONY : fpsCal.s
+
+# target to generate assembly for a file
+fpsCal.cpp.s:
+	$(MAKE) -f CMakeFiles/fpsCal.dir/build.make CMakeFiles/fpsCal.dir/fpsCal.cpp.s
+.PHONY : fpsCal.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -157,11 +197,15 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... fpsCal"
 	@echo "... rebuild_cache"
 	@echo "... aruco_executable"
 	@echo "... aruco.o"
 	@echo "... aruco.i"
 	@echo "... aruco.s"
+	@echo "... fpsCal.o"
+	@echo "... fpsCal.i"
+	@echo "... fpsCal.s"
 .PHONY : help
 
 
