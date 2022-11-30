@@ -3,8 +3,8 @@ project(aruco_det)
 
 find_package(OpenCV)
 include_directories(${OpenCV_INCLUDE_DIRS})
-add_executable(aruco_executable aruco.cpp)
+add_executable(aruco_executable src/aruco.cpp)
 target_link_libraries(aruco_executable ${OpenCV_LIBRARIES})
 
-add_executable(fpsCal fpsCal.cpp)
+add_executable(fpsCal src/fpsCal.cpp)
 target_link_libraries(fpsCal ${OpenCV_LIBRARIES})

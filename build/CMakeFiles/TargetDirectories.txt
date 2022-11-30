@@ -1,0 +1,4 @@
+/home/ammar/sitl_agcam/aruco_detection_cpp/build/CMakeFiles/edit_cache.dir
+/home/ammar/sitl_agcam/aruco_detection_cpp/build/CMakeFiles/fpsCal.dir
+/home/ammar/sitl_agcam/aruco_detection_cpp/build/CMakeFiles/rebuild_cache.dir
+/home/ammar/sitl_agcam/aruco_detection_cpp/build/CMakeFiles/aruco_executable.dir
